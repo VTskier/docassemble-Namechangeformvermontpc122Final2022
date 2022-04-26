@@ -1,0 +1,533 @@
+#TO DO
+#I need to fix my mailing address "template" code from Quinten so I can include PO Box in field label
+#Only collect city and state for spouse. May need to do dedicated code for that to not mess up the #collection of users info.
+#The form only has room for 3 kids. How do I allow additional kid info to overflow onto next page?
+#Make it so people can review and edit their other answers. They aren't all listed.
+
+---
+include:
+  - docassemble.AssemblyLine:al_package.yml
+  - docassemble.ALAnyState:any_state.yml
+---
+metadata:
+  title: |
+    Name Change for Adult - Vermont - Form PC 122
+  short title: |
+    Name Change for Adult
+  tags:
+    - Other
+  authors:
+    - Guided interview by VTLawHelp.org website / Legal Services Vermont
+---
+mandatory: True
+comment: |
+  This contains metadata that will not be overwritten if this YAML file is included in another
+  file. Each file gets its own key in the interview_metadata dictionary.
+  Most keys are not currently used at runtime, other than "allowed courts".
+code: |
+  interview_metadata
+  if not defined("interview_metadata['namechangeformvermontpc122final2022']"):
+    interview_metadata.initializeObject("namechangeformvermontpc122final2022")
+    interview_metadata["namechangeformvermontpc122final2022"].update({
+      "al_weaver_version": "1.6.1",
+      "generated on": "2022-04-11",
+      "title": "Name Change for Adult - Vermont - Form PC 122",
+      "short title": "Name Change for Adult",
+      "description": "Change your name in Vermont",
+      "original_form": "https://www.vermontjudiciary.org/sites/default/files/documents/Pc%20122.pdf",
+      "allowed courts": [
+        "Probate and Family Court",
+      ],
+      "categories": [
+        "Name change",
+      ],        
+      "logic block variable": "interview_order_namechangeformvermontpc122final2022",
+      "attachment block variable": "namechangeformvermontpc122final2022_attachment",
+      "typical role": "plaintiff",
+    })
+---
+code: |
+  interview_metadata['main_interview_key'] =  'namechangeformvermontpc122final2022'
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "VT"
+---
+code: |
+  github_repo_name =  'docassemble-Namechangeformvermontpc122Final2022'
+---
+code: |
+  interview_short_title = "Ask the court to change your name"
+---
+code: |
+  al_form_type = 'starts_case'
+---
+objects:
+  - users: ALPeopleList.using(ask_number=True,target_number=1)
+  - spouses: ALPeopleList.using(ask_number=True,complete_attribute=["name.first","address.city","address.state"])
+---
+sections:
+  - review_namechangeformvermontpc122final2022: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_namechangeformvermontpc122final2022
+code: |
+  nav.set_section('review_namechangeformvermontpc122final2022')
+  user_role = 'plaintiff'
+  docket_number
+  users.gather()
+  set_parts(subtitle=str(users))
+  users[0].birthdate
+  users1_town_of_birth
+  users1_state_of_birth
+  set_progress(20)
+  users[0].address.county
+  users[0].mailing_address.address
+  users[0].address.address
+  users[0].phone_number
+  users[0].email
+  set_progress(40)
+  children.there_are_any
+  children.gather()
+  collect_children_birthdates
+  set_progress(70)
+  spouses.gather()
+  set_progress(90)
+  users1_new_name_wish_to_be_known_by
+  interview_order_namechangeformvermontpc122final2022 = True
+---
+#Michelle made this code below so we could group the children questions together -- ask about child1, #child2, child3. What do we do if they have more than 3 minor children???
+code: |
+  for child in children.complete_elements():
+    child.birthdate
+    child.town_of_birth
+    child.state_of_birth
+  collect_children_birthdates = True
+---
+id: Child town of birth
+generic object: ALIndividual
+question: |
+  Where was ${x} born?
+fields:
+  - Town of birth: x.town_of_birth
+  - State of birth: x.state_of_birth
+---
+
+
+#####Kris added this code below to customize the automated questions#####
+
+---
+code: |
+  if not is_married: 
+    spouses.target_number = 0
+  else: 
+    spouses.target_number = 1
+---
+id: birthdate question
+generic object: ALIndividual
+question: |
+  Birthdate for ${x}
+fields:
+  - Birthdate: x.birthdate
+    datatype: BirthDate
+---
+id: your contact information
+question: |
+  What is your contact information?
+subquestion: |
+  Include at least **one** way to reach you other than by mail.
+
+  ${ collapse_template(why_contact_info_needed_template) }
+fields:  
+  - Phone number: users[0].phone_number
+    required: False
+  - Email address: users[0].email    
+    datatype: email
+    required: False
+#validation code: |
+#  if (not showifdef('users[0].phone_number') and \
+#      (not showifdef('users[0].email'))
+#    validation_error(word("You need to provide at least one contact method.")
+---
+id: how many children
+question: |
+  % if al_form_type in ['starts_case','existing_case','appeal']:
+  Do you have children who are under age 18?
+  % else:
+  Do you have children who are under age 18?
+  % endif  
+fields:
+  - no label: children.there_are_any
+    datatype: yesnoradio
+  - How many?: children.target_number
+    datatype: integer
+    show if: children.there_are_any
+validation code: |
+  if not children.there_are_any:
+    children.target_number = 0
+---
+id: docket number
+question: |
+  Do you have a docket number for your case already?
+fields:
+  - I don't have a docket number: dont_know_docket_number
+    datatype: yesno    
+  - Docket Number: docket_number
+    hide if: dont_know_docket_number
+validation code: |
+  # This should be safe to 
+  if dont_know_docket_number:
+    docket_number = ''    
+---
+template: users[0].mailing_address.address_label
+content: |
+  Street Address or PO Box    
+---    
+id: your address
+sets:
+  - users[0].address.address
+  - users[0].address.city
+  - users[0].address.zip
+  - users[0].address.unit
+  - users[0].address.state
+  - users[0].address.country
+question: |
+  What is your physical address?
+fields:
+  - code: |
+      users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+---
+id: have a spouse
+question: |
+  Do you have a spouse?
+fields:
+  - no label: is_married
+    datatype: yesnoradio
+---  
+ 
+
+#sets:
+#  - x.address.address
+#  - x.address.city
+#  - x.address.zip
+#  - x.address.unit
+#  - x.address.state
+#  - x.address.country
+#id: persons address
+#generic object: ALIndividual
+#question: |
+#  What is ${ x.possessive('address') }?
+#fields:
+#  - code: |
+#      x.address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+#---
+
+
+###################### Main order ######################
+---
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  namechangeformvermontpc122final2022_intro
+  interview_order_namechangeformvermontpc122final2022
+  signature_date
+  # Save anonymized interview statistics (customize the saved data below)
+  store_variables_snapshot(data={'zip': users[0].address.zip})
+  namechangeformvermontpc122final2022_preview_question
+  basic_questions_signature_flow
+  namechangeformvermontpc122final2022_download
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Name_Change_for_Adult__Vermont__FormPC122
+continue button field: namechangeformvermontpc122final2022_intro
+question: |
+  Name Change for Adult - Vermont - Form PC 122
+subquestion: |
+  In order to change your name on most documents, you will need a court order that legally changes your name. To get that court order, you begin by filing documents with your county’s Probate Division of Superior Court. (https://www.vermontjudiciary.org/court-locations?f%5B0%5D=court_division%3A6)
+
+  Documents you need to submit to the court:
+
+  * Name change petition form (form PC 122)
+  * Certified copy of Birth Certificate
+  * Certified copy of Marriage Certificate (if applicable)
+  * Certified copy of Birth Certificate for minor children (if applicable)
+  * $150 check or fee waiver form (form 228) if you cannot afford the $150 filing fee
+
+  This interview will help you fill out the name change petition form for Vermont (form PC 122). When you are done you can download or print a completed PDF.
+  
+  DO NOT SIGN THE FORM until you are told to do so by a court clerk or a judge. You can leave the signatures and date and location of signatures blank.
+  
+  You will then mail or bring your documents to your local probate court. We suggest that you bring an extra copy of the paperwork you submit and ask the clerk to stamp it with the filing date for your records. The court will send you a notice with a hearing date. Plan to attend a short hearing. The judge may ask you a few questions, like confirming that nobody is forcing you to change your name. There is no opposing party. If the judge approves your petition, they will issue an Order Changing Name.
+  
+  It will take you about 10 minutes to complete this interview. It will produce a completed name change petition form (form PC 122).
+---
+id: About you
+question: |
+  About you
+fields:
+  - "The county in Vermont where you live now":   users[0].address.county
+    maxlength: 15
+---
+id: Where you were born
+question: |
+  Where were you born?
+fields:
+  - "The city/town where you were born":   users1_town_of_birth
+    maxlength: 15
+  - "The state where you were born":   users1_state_of_birth
+    maxlength: 5
+---
+id: Your new name
+question: |
+  Your new name
+fields:
+  - "The new name that you wish to be known by": users1_new_name_wish_to_be_known_by
+    maxlength: 50
+
+
+---
+id: preview namechangeformvermontpc122final2022
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_court_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Make changes" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_namechangeformvermontpc122final2022'), label='Make changes', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: namechangeformvermontpc122final2022_preview_question    
+---
+code: |
+  signature_fields = []
+---
+id: namechangeformvermontpc122final2022 review screen
+event: review_namechangeformvermontpc122final2022
+question: |
+  Review your answers
+review:
+  - Edit: users1_state_of_birth
+    button: |
+      **The state where you were born**:
+      ${ users1_state_of_birth }
+  - Edit: users1_town_of_birth
+    button: |
+      **The city/town where you were born**:
+      ${ users1_town_of_birth }
+  - Edit: children1_town_of_birth
+    button: |
+      **The city/town where the child was born**:
+      ${ children1_town_of_birth }
+  - Edit: children1_state_of_birth
+    button: |
+      **The state where the child was born**:
+      ${ children1_state_of_birth }
+  - Edit: children2_town_of_birth
+    button: |
+      **The city/town where the child was born**:
+      ${ children2_town_of_birth }
+  - Edit: children2_state_of_birth
+    button: |
+      **The state where the child was born**:
+      ${ children2_state_of_birth }
+  - Edit: children3_town_of_birth
+    button: |
+      **The city/town where the child was born**:
+      ${ children3_town_of_birth }
+  - Edit: children3_state_of_birth
+    button: |
+      **The state where the child was born**:
+      ${ children3_state_of_birth }
+  - Edit: users1_new_name_wish_to_be_known_by
+    button: |
+      **The new name that you wish to be known by**:
+      ${ users1_new_name_wish_to_be_known_by }
+  - Edit: docket_number
+    button: |
+      **docket_number**:
+      ${ docket_number }
+  - Edit: users[0].address.county
+    button: |
+      **users[0].address.county**
+      ${ users[0].address.county }
+
+  - Edit: users.revisit
+    button: |
+      **Users**
+
+      % for item in users:
+        * ${ item }
+      % endfor
+  - Edit: children.revisit
+    button: |
+      **Children**
+
+      % for item in children:
+        * ${ item }
+      % endfor
+  - Edit: spouses.revisit
+    button: |
+      **Spouses**
+
+      % for item in spouses:
+        * ${ item }
+      % endfor
+---
+continue button field: users.revisit
+question: |
+  Edit users
+subquestion: |
+  ${ users.table }
+
+  ${ users.add_action() }
+---
+table: users.table
+rows: users
+columns:
+  - Address: |
+      row_item.address.block() if defined("row_item.address.city") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+  - Birthdate: |
+      row_item.birthdate if defined("row_item.birthdate") else ""
+  - Mailing address: |
+      row_item.mailing_address.block() if defined("row_item.mailing_address.address") else ""
+  - Email: |
+      row_item.email if defined("row_item.email") else ""
+  - Phone number: |
+      row_item.phone_number if defined("row_item.phone_number") else ""
+edit:
+  - address.city
+  - name.first
+  - birthdate
+  - mailing_address.address
+  - email
+  - phone_number
+confirm: True
+
+---
+continue button field: children.revisit
+question: |
+  Edit children
+subquestion: |
+  ${ children.table }
+
+  ${ children.add_action() }
+---
+table: children.table
+rows: children
+columns:
+  - Birthdate: |
+      row_item.birthdate if defined("row_item.birthdate") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - birthdate
+  - name.first
+confirm: True
+
+---
+continue button field: spouses.revisit
+question: |
+  Edit spouses
+subquestion: |
+  ${ spouses.table }
+
+  ${ spouses.add_action() }
+---
+table: spouses.table
+rows: spouses
+columns:
+  - Address: |
+      row_item.address.block() if defined("row_item.address.city") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - address.city
+  - name.first
+confirm: True
+
+---
+id: download namechangeformvermontpc122final2022
+event: namechangeformvermontpc122final2022_download
+question: |
+  Your form is ready to download.
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Make changes" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_namechangeformvermontpc122final2022'), label='Make changes', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+
+progress: 100
+---
+objects:
+  - namechangeformvermontpc122final2022_post_interview_instructions: ALDocument.using(title="Instructions", filename="namechangeformvermontpc122final2022_next_steps.docx", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  - namechangeformvermontpc122final2022_attachment: ALDocument.using(title="Name Change for Adult - Vermont - FormPC122", filename="name-change-form-vermont-PC122-v3.pdf", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+---
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[namechangeformvermontpc122final2022_post_interview_instructions,namechangeformvermontpc122final2022_attachment], filename="namechangeformvermontpc122final2022.pdf_package.pdf", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[namechangeformvermontpc122final2022_attachment], filename="namechangeformvermontpc122final2022.pdf_package.pdf", title="All forms to download for your records", enabled=True)
+---
+attachments:
+  - name: namechangeformvermontpc122final2022 post interview instructions
+    filename: Post-interview-instructions     
+    variable name: namechangeformvermontpc122final2022_post_interview_instructions[i]        
+    skip undefined: True
+    docx template file: namechangeformvermontpc122final2022_next_steps.docx
+  - name: namechangeformvermontpc122final2022 attachment
+    filename: name-change-form-vermont-PC122-v3.pdf    
+    variable name: namechangeformvermontpc122final2022_attachment[i]        
+    skip undefined: True
+    pdf template file: name-change-form-vermont-PC122-v3.pdf
+    fields:
+      - "docket_number": ${ docket_number }
+      - "trial_court_county": ${ users[0].address.county }
+      - "users1_address_state": ${ users[0].address.state }
+      - "users1_name__1": ${ users[0] }
+      - "users1_name__2": ${ users[0] }
+      - "users1_name__3": ${ users[0] }
+      - "users1_address_city": ${ users[0].address.city }
+      - "users1_birthdate": ${ users[0].birthdate.format() }
+      - "children1_birthdate": ${ children[0].birthdate.format() }
+      - "children1_name": ${ children[0] }
+      - "children2_birthdate": ${ children[1].birthdate.format() }
+      - "children2_name": ${ children[1] }
+      - "children3_name": ${ children[2] }
+      - "children3_birthdate": ${ children[2].birthdate.format() }
+      - "spouses1_address_state": ${ spouses[0].address.state }
+      - "spouses1_name": ${ spouses[0] }
+      - "spouses1_address_city": ${ spouses[0].address.city }
+      - "users1_mailing_address_line_one": ${ users[0].mailing_address.line_one() }
+      - "users1_mailing_address_line_two": ${ users[0].mailing_address.line_two() }
+      - "users1_email": ${ users[0].email }
+      - "users1_phone_number": ${ users[0].phone_number }
+      - "users1_state_of_birth": ${ users1_state_of_birth }
+      - "users1_town_of_birth": ${ users1_town_of_birth }
+      - "children1_town_of_birth": ${ children[0].town_of_birth }
+      - "children1_state_of_birth": ${ children[0].state_of_birth }
+      - "children2_town_of_birth": ${ children[1].town_of_birth }
+      - "children2_state_of_birth": ${ children[1].state_of_birth }
+      - "children3_town_of_birth": ${ children[2].town_of_birth }
+      - "children3_state_of_birth": ${ children[2].state_of_birth }
+      - "users1_new_name_wish_to_be_known_by": ${ users1_new_name_wish_to_be_known_by }
