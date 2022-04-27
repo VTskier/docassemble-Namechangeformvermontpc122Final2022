@@ -1,4 +1,7 @@
 #TO DO
+#Do multiple choice for county.
+#How do I customize the ALAnyState file to make a Vermont style with our logo, our name of organization and make darker blue buttons and top bar?
+#How do I customize the basic questions intro screen? It should explain VTLawForms or VTCourtForms and how it works. Buy the URL!
 #I need to fix my mailing address "template" code from Quinten so I can include PO Box in field label
 #Only collect city and state for spouse. May need to do dedicated code for that to not mess up the #collection of users info.
 #The form only has room for 3 kids. How do I allow additional kid info to overflow onto next page?
@@ -14,6 +17,8 @@ metadata:
     Name Change for Adult - Vermont - Form PC 122
   short title: |
     Name Change for Adult
+  logo:  |
+    <img src="https://apps-dev.suffolklitlab.org/playgroundstatic/VermontNameChangeFormPC122/270/LSV_logo.png">
   tags:
     - Other
   authors:
@@ -185,9 +190,9 @@ validation code: |
   if dont_know_docket_number:
     docket_number = ''    
 ---
-template: users[0].mailing_address.address_label
+template: users[0].address.address_label
 content: |
-  Street Address or PO Box    
+  Address    
 ---    
 id: your address
 sets:
@@ -201,7 +206,7 @@ question: |
   What is your physical address?
 fields:
   - code: |
-      users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE)
+      users[0].address_fields(default_state=AL_DEFAULT_STATE)
 ---
 id: have a spouse
 question: |
@@ -276,7 +281,21 @@ question: |
   About you
 fields:
   - "The county in Vermont where you live now":   users[0].address.county
-    maxlength: 15
+    choices:
+      - Addison
+      - Bennington
+      - Caledonia
+      - Chittenden
+      - Essex
+      - Franklin
+      - Grand Isle
+      - Lamoille
+      - Orange
+      - Orleans
+      - Rutland
+      - Washington
+      - Windham
+      - Windsor
 ---
 id: Where you were born
 question: |
