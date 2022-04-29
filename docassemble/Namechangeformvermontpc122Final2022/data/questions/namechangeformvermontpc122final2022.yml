@@ -1,10 +1,7 @@
 #TO DO
-#Do multiple choice for county.
-#How do I customize the ALAnyState file to make a Vermont style with our logo, our name of organization and make darker blue buttons and top bar?
-#How do I customize the basic questions intro screen? It should explain VTLawForms or VTCourtForms and how it works. Buy the URL!
+#The form only has room for 3 kids. How do I allow additional kid info to overflow onto next page?
 #I need to fix my mailing address "template" code from Quinten so I can include PO Box in field label
 #Only collect city and state for spouse. May need to do dedicated code for that to not mess up the #collection of users info.
-#The form only has room for 3 kids. How do I allow additional kid info to overflow onto next page?
 #Make it so people can review and edit their other answers. They aren't all listed.
 
 ---
@@ -12,17 +9,22 @@ include:
   - docassemble.AssemblyLine:al_package.yml
   - docassemble.ALAnyState:any_state.yml
 ---
+#######Don't forget to comment this out when you need to see the developer info at top of interview####
+default screen parts:
+  pre: |
+
+---
 metadata:
   title: |
     Name Change for Adult - Vermont - Form PC 122
   short title: |
     Name Change for Adult
-  logo:  |
-    <img src="https://apps-dev.suffolklitlab.org/playgroundstatic/VermontNameChangeFormPC122/270/LSV_logo.png">
+#  logo:  |
+#    <img src="https://apps-#dev.suffolklitlab.org/playgroundstatic/VermontNameChangeFormPC122/270/LSV_logo.png">
   tags:
     - Other
   authors:
-    - Guided interview by VTLawHelp.org website / Legal Services Vermont
+    - Guided interview by Legal Services Vermont / VTLawHelp.org website
 ---
 mandatory: True
 comment: |
@@ -70,6 +72,18 @@ code: |
 ---
 code: |
   al_form_type = 'starts_case'
+---
+code: |
+  AL_ORGANIZATION_TITLE = "VTCourtForms"
+---
+code: |
+  AL_ORGANIZATION_HOMEPAGE = "https://vtlawhelp.org/"
+---
+objects:
+  - al_logo: DAStaticFile.using(filename="LSV_bug.png")
+#  .al-logo img {
+#  max-height: 40px;
+#}
 ---
 objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
@@ -250,6 +264,67 @@ code: |
   namechangeformvermontpc122final2022_preview_question
   basic_questions_signature_flow
   namechangeformvermontpc122final2022_download
+---
+#Kris put this here to customize the very first screen of the interview
+id: basic questions intro screen
+decoration: form-lineal
+question: |
+  ${interview_short_title}: ${ AL_ORGANIZATION_TITLE}
+subquestion: |
+  Welcome to VTCourtForms.
+
+  % if form_approved_for_email_filing:
+  ${ AL_ORGANIZATION_TITLE } can help you complete and file court forms in 3 steps:
+  % else:
+  ${ AL_ORGANIZATION_TITLE } can help you complete and download forms in 3 steps:
+  % endif
+  
+  Step 1. Answer questions that will fill in court forms for you.  
+  Step 2. Preview the completed forms.  
+  % if form_approved_for_email_filing:  
+  Step 3. Email the form to the court using this secure website and save copies
+  for yourself for later reference.  
+  % elif al_form_type in ['starts_case','existing_case','appeal']:
+  Step 3. Download and print the final forms. You will need to mail, efile or deliver them
+  to the court on your own.
+  % else:
+  Step 3. Download and print the final forms. You will need to mail, efile or deliver them
+  to the court on your own.
+  % endif
+  
+  VTCourtForms was created by Legal Services Vermont as an online tool for Vermonters. It is free to use this tool, but the form(s) may require a fee when you submit them to court. Learn more on the next page.
+  
+  VTCourtForms is for non-commercial use only.
+  
+  This site is not a lawyer. Visit the [VTLawHelp.org website](https://vtlawhelp.org) if you have legal questions. The website is operated by Legal Services Vermont and Vermont Legal Aid.
+  
+#  Tap the {green words} in any screen for a definition or more information.
+  
+#  % if chat_partners_available().help:
+#  Live help is currently available in this interview. Click the speech bubble
+#  (:comment-alt:) in the navigation bar to connect to a live advocate for help.
+#  % endif
+fields:
+  - To continue, you must accept our [terms of use](https://vtlawhelp.org/vlh-privacy): acknowledged_information_use
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+      - I accept the terms of use.
+    validation messages:
+      minlength: |
+        You cannot continue unless you agree to the terms of use.        
+continue button field: al_intro_screen
+#terms:
+#  green words: |
+#    Green words are legal terms or a short way of referring to something that needs more explanation. #The definition or explanation pops up when you tap the green words.
+right: |
+  % if user_has_saved_answers:
+  ${fa_icon("bell", color="primary", size="sm")}
+  Saved answers available!  
+  
+  ${action_button_html(url_action('load_answer'), icon="folder-open", label=word("View answers"), size="sm" )}
+  % endif    
 ---
 comment: |
   This question is used to introduce your interview. Please customize
