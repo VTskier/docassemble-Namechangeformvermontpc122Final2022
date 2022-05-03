@@ -1,8 +1,9 @@
 #TO DO
-#The form only has room for 3 kids. How do I allow additional kid info to overflow onto next page?
+#The form only has room for 3 kids. How do I allow additional kid info to overflow onto next page? I #think I should edit the form to make room for 4 kids and call it good. The overflow process is hard #and it typically makes a Word doc as the addendum!
 #I need to fix my mailing address "template" code from Quinten so I can include PO Box in field label
 #Only collect city and state for spouse. May need to do dedicated code for that to not mess up the #collection of users info.
 #Make it so people can review and edit their other answers. They aren't all listed.
+#Image of big logo in text in first screen. I'd like to float it to the right and not have shadow.
 
 ---
 include:
@@ -10,8 +11,8 @@ include:
   - docassemble.ALAnyState:any_state.yml
 ---
 #######Don't forget to comment this out when you need to see the developer info at top of interview####
-default screen parts:
-  pre: |
+#default screen parts:
+#  pre: |
 
 ---
 metadata:
@@ -264,15 +265,22 @@ code: |
   namechangeformvermontpc122final2022_preview_question
   basic_questions_signature_flow
   namechangeformvermontpc122final2022_download
+  
 ---
+images:
+  big_logo: LSV_logo.png  
+---
+
 #Kris put this here to customize the very first screen of the interview
 id: basic questions intro screen
 decoration: form-lineal
 question: |
   ${interview_short_title}: ${ AL_ORGANIZATION_TITLE}
 subquestion: |
+  [FILE big_logo, 30%, Legal Services Vermont logo]
+  
   Welcome to VTCourtForms.
-
+  
   % if form_approved_for_email_filing:
   ${ AL_ORGANIZATION_TITLE } can help you complete and file court forms in 3 steps:
   % else:
@@ -297,7 +305,7 @@ subquestion: |
   VTCourtForms is for non-commercial use only.
   
   This site is not a lawyer. Visit the [VTLawHelp.org website](https://vtlawhelp.org) if you have legal questions. The website is operated by Legal Services Vermont and Vermont Legal Aid.
-  
+
 #  Tap the {green words} in any screen for a definition or more information.
   
 #  % if chat_partners_available().help:
