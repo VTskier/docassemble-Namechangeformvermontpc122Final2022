@@ -17,7 +17,7 @@ default screen parts:
 ---
 metadata:
   title: |
-    Name Change for Adult - Vermont - Form PC 122
+    Name Change for Adult — Vermont court form PC 122
   short title: |
     Name Change for Adult
 #  logo:  |
@@ -39,7 +39,7 @@ code: |
     interview_metadata["namechangeformvermontpc122final2022"].update({
       "al_weaver_version": "1.6.1",
       "generated on": "2022-04-11",
-      "title": "Name Change for Adult - Vermont - Form PC 122",
+      "title": "Name Change for Adult — Vermont court form PC 122",
       "short title": "Name Change for Adult",
       "description": "Change your name in Vermont",
       "original_form": "https://www.vermontjudiciary.org/sites/default/files/documents/Pc%20122.pdf",
@@ -281,33 +281,18 @@ subquestion: |
   
   Welcome to VTCourtForms.
   
-  % if form_approved_for_email_filing:
-  ${ AL_ORGANIZATION_TITLE } can help you complete and file court forms in 3 steps:
-  % else:
   ${ AL_ORGANIZATION_TITLE } can help you complete and download forms in 3 steps:
-  % endif
   
   **Step 1:** Answer questions that will fill in court forms for you.  
   **Step 2:** Preview the completed forms.  
-  % if form_approved_for_email_filing:  
-  **Step 3:**Email the form to the court using this secure website and save copies
-  for yourself for later reference.  
-  % elif al_form_type in ['starts_case','existing_case','appeal']:
-  **Step 3:** Download and print the final forms. You will need to mail, efile or deliver them
+  **Step 3:** Download or print the final forms. You will need to mail, email, efile or deliver them
   to the court on your own.
-  % else:
-  **Step 3:** Download and print the final forms. You will need to mail, efile or deliver them
-  to the court on your own.
-  % endif
   
+  <i class="fas fa-file fa-2x"></i> This interview will produce a completed Name Change Petition Form  — Vermont court form PC 122. Be sure to [visit the VTLawHelp.org website to understand the name change process.](https://vtlawhelp.org/name-and-gender-marker-changes-vermont)
   
-  <i class="fas fa-stopwatch fa-2x"></i>  It will take you about 10 minutes to complete this interview. 
-  
-  <i class="fas fa-file fa-2x"></i> The interview will produce a completed Name Change Petition Form (form PC 122).
+    <i class="fas fa-stopwatch fa-2x"></i>  It will take you about 10 minutes to complete this interview.
 
-  VTCourtForms was created by Legal Services Vermont as an online tool for Vermonters. It is free to use this tool, but the form(s) may require a fee when you submit them to court. Learn more on the next page.
-  
-  VTCourtForms is for non-commercial use only.
+  VTCourtForms was created by Legal Services Vermont as an online tool for Vermonters. It is free to use this tool. However, the court may have a filing fee.
   
   This site is not a lawyer. Visit the [VTLawHelp.org website](https://vtlawhelp.org) if you have legal questions. The website is operated by Legal Services Vermont and Vermont Legal Aid.
 
@@ -344,17 +329,17 @@ comment: |
 id: Name_Change_for_Adult__Vermont__FormPC122
 continue button field: namechangeformvermontpc122final2022_intro
 question: |
-  Name Change for Adult - Vermont - Form PC 122
+  Name Change for Adult — Vermont court form PC 122
 subquestion: |
   In order to change your name on most documents, you will need a court order that legally changes your name. To get that court order, you begin by filing documents with your county’s <a href="https://www.vermontjudiciary.org/court-locations?f%5B0%5D=court_division%3A6">Probate Division of Superior Court</a>.
 
   Documents you need to submit to the court:
 
-  * Name Change Petition Form (form PC 122)
+  * This form: the Name Change Petition Form (form PC 122)
   * Certified copy of Birth Certificate
   * Certified copy of Marriage Certificate (if applicable)
   * Certified copy of Birth Certificate for minor children (if applicable)
-  * $150 check or Fee Waiver Form (form 228) if you cannot afford the $150 filing fee
+  * $150 check or Fee Waiver Form (600-00228) if you cannot afford the $150 filing fee
 
   This interview will help you fill out the Name Change Petition Form for Vermont (form PC 122). When you are done you can download or print a completed PDF.
   
@@ -362,8 +347,7 @@ subquestion: |
   
   You will then mail or bring your documents to your local probate court. We suggest that you bring an extra copy of the paperwork you submit and ask the clerk to stamp it with the filing date for your records. The court will send you a notice with a hearing date. Plan to attend a short hearing. The judge may ask you a few questions, like confirming that nobody is forcing you to change your name. There is no opposing party. If the judge approves your petition, they will issue an Order Changing Name.
   
-    Select Next to complete the name change petition form (form PC 122).
-
+    To start the program, click on the Next button.
 ---
 id: About you
 question: |
@@ -573,9 +557,9 @@ confirm: True
 id: download namechangeformvermontpc122final2022
 event: namechangeformvermontpc122final2022_download
 question: |
-  Your form is ready to download.
+  Your form is ready to download
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
+  Your form is ready.
   
   View, download and send your form below. Click the "Make changes" button to fix any mistakes.
 
@@ -590,19 +574,14 @@ subquestion: |
 progress: 100
 ---
 objects:
-  - namechangeformvermontpc122final2022_post_interview_instructions: ALDocument.using(title="Instructions", filename="namechangeformvermontpc122final2022_next_steps.docx", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
-  - namechangeformvermontpc122final2022_attachment: ALDocument.using(title="Name Change for Adult - Vermont - FormPC122", filename="name-change-form-vermont-PC122-v3.pdf", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
+  - namechangeformvermontpc122final2022_post_interview_instructions: ALStaticDocument.using(title="Instructions", filename="namechangeformvermontpc122final2022_next_steps.pdf", enabled=True)
+  - namechangeformvermontpc122final2022_attachment: ALDocument.using(title="Name Change for Adult - Vermont court form PC 122", filename="name-change-form-vermont-PC122-v3.pdf", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
 ---
 objects:
   - al_user_bundle: ALDocumentBundle.using(elements=[namechangeformvermontpc122final2022_post_interview_instructions,namechangeformvermontpc122final2022_attachment], filename="namechangeformvermontpc122final2022.pdf_package.pdf", title="All forms to download for your records", enabled=True)
   - al_court_bundle: ALDocumentBundle.using(elements=[namechangeformvermontpc122final2022_attachment], filename="namechangeformvermontpc122final2022.pdf_package.pdf", title="All forms to download for your records", enabled=True)
 ---
 attachments:
-  - name: namechangeformvermontpc122final2022 post interview instructions
-    filename: Post-interview-instructions     
-    variable name: namechangeformvermontpc122final2022_post_interview_instructions[i]        
-    skip undefined: True
-    docx template file: namechangeformvermontpc122final2022_next_steps.docx
   - name: namechangeformvermontpc122final2022 attachment
     filename: name-change-form-vermont-PC122-v3.pdf    
     variable name: namechangeformvermontpc122final2022_attachment[i]        
