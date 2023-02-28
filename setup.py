@@ -54,7 +54,7 @@ setup(name='docassemble.Namechangeformvermontpc122Final2022',
       url='https://apps-dev.suffolklitlab.org/playground?project=default&file=namechangeformvermontpc122final2022.yml',
       packages=find_packages(),
       namespace_packages=['docassemble'],
-      install_requires=['docassemble.ALAnyState', 'docassemble.AssemblyLine>=2.20.1'],
+      install_requires=['docassemble.ALAnyState', 'docassemble.AssemblyLine>=2.21.0'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/Namechangeformvermontpc122Final2022/', package='docassemble.Namechangeformvermontpc122Final2022'),
      )

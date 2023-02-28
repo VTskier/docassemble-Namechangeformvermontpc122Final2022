@@ -25,7 +25,7 @@ metadata:
   tags:
     - Other
   authors:
-    - Guided interview by Legal Services Vermont / VTLawHelp.org website
+    - Legal Services Vermont / [VTLawHelp.org website](https://vtlawhelp.org)
 ---
 mandatory: True
 comment: |
@@ -279,20 +279,22 @@ question: |
 subquestion: |
   [FILE big_logo, 30%, Legal Services Vermont logo]
   
-  Welcome to VTCourtForms.
+  Welcome to ${ AL_ORGANIZATION_TITLE}.
   
   ${ AL_ORGANIZATION_TITLE } can help you complete and download forms in 3 steps:
   
   **Step 1:** Answer questions that will fill in court forms for you.  
   **Step 2:** Preview the completed forms.  
-  **Step 3:** Download or print the final forms. You will need to mail, email, efile or deliver them
+  **Step 3:** Download, save or print the final forms. You will need to mail, email, efile or deliver them
   to the court on your own.
   
-  <i class="fas fa-file fa-2x"></i> This interview will produce a completed Name Change Petition Form  — Vermont court form PC 122. Be sure to [visit the VTLawHelp.org website to understand the name change process.](https://vtlawhelp.org/name-and-gender-marker-changes-vermont)
+  <i class="fas fa-file-text fa-2x"></i> This interview will produce a completed Name Change Petition Form  — Vermont court form PC 122.
   
-    <i class="fas fa-stopwatch fa-2x"></i>  It will take you about 10 minutes to complete this interview.
+    <i class="fas fa-clock fa-2x"></i>  It will take you about 10 minutes to complete this interview.
 
-  VTCourtForms was created by Legal Services Vermont as an online tool for Vermonters. It is free to use this tool. However, the court may have a filing fee.
+  VTCourtForms was created by Legal Services Vermont as an online tool for Vermonters. It is free to use this tool. However, you may have to pay the court a filing fee. 
+  
+  Be sure to [visit the VTLawHelp.org website to understand the name change process and any fees.](https://vtlawhelp.org/name-and-gender-marker-changes-vermont)
   
   This site is not a lawyer. Visit the [VTLawHelp.org website](https://vtlawhelp.org) if you have legal questions. The website is operated by Legal Services Vermont and Vermont Legal Aid.
 
@@ -331,21 +333,11 @@ continue button field: namechangeformvermontpc122final2022_intro
 question: |
   Name Change for Adult — Vermont court form PC 122
 subquestion: |
-  In order to change your name on most documents, you will need a court order that legally changes your name. To get that court order, you begin by filing documents with your county’s <a href="https://www.vermontjudiciary.org/court-locations?f%5B0%5D=court_division%3A6">Probate Division of Superior Court</a>.
+  In order to change your name on most documents, you will need a court order that legally changes your name. To get that court order, you begin by giving documents to your county’s <a href="https://www.vermontjudiciary.org/court-locations?f%5B0%5D=court_division%3A6">Probate Division of Superior Court</a>.
 
-  Documents you need to submit to the court:
-
-  * This form: the Name Change Petition Form (form PC 122)
-  * Certified copy of Birth Certificate
-  * Certified copy of Marriage Certificate (if applicable)
-  * Certified copy of Birth Certificate for minor children (if applicable)
-  * $150 check or Fee Waiver Form (600-00228) if you cannot afford the $150 filing fee
-
-  This interview will help you fill out the Name Change Petition Form for Vermont (form PC 122). When you are done you can download or print a completed PDF.
+  This interview will help you fill out the Name Change Petition Form for Vermont (form PC 122). When you are done you can save, download or print a completed PDF document.
   
     <i class="fa fa-exclamation-circle fa-2x"></i>  DO NOT SIGN THE FORM until you are told to do so by a court clerk or a judge. Leave the signatures blank. Also leave the date and location of the signature blank.
-  
-  You will then mail or bring your documents to your local probate court. We suggest that you bring an extra copy of the paperwork you submit and ask the clerk to stamp it with the filing date for your records. The court will send you a notice with a hearing date. Plan to attend a short hearing. The judge may ask you a few questions, like confirming that nobody is forcing you to change your name. There is no opposing party. If the judge approves your petition, they will issue an Order Changing Name.
   
     To start the program, click on the Next button.
 ---
@@ -574,7 +566,7 @@ subquestion: |
 progress: 100
 ---
 objects:
-  - namechangeformvermontpc122final2022_post_interview_instructions: ALStaticDocument.using(title="Instructions", filename="namechangeformvermontpc122final2022_next_steps.pdf", enabled=True)
+  - namechangeformvermontpc122final2022_post_interview_instructions: ALStaticDocument.using(title="VTCourtForms Next Steps — Changing Your Name", filename="namechangeformvermontpc122final2022_next_steps.pdf", enabled=True)
   - namechangeformvermontpc122final2022_attachment: ALDocument.using(title="Name Change for Adult - Vermont court form PC 122", filename="name-change-form-vermont-PC122-v3.pdf", enabled=True, has_addendum=False, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
 ---
 objects:
